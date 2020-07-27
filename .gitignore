@@ -1,0 +1,6 @@
+./spider/chromedriver
+./spider/.vscode
+./spider/__pycache__
+./spider/venv
+
+./learn
