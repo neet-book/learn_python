@@ -1,27 +1,40 @@
+import os
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from datetime import datetime
-from Fetch import get_chara_skill
+from Fetch import get_chara_skill, get_chara_info, get_act_pattern
 
 
-start = datetime.now()
-path = '/Users/erika/File/python/crawler/chromedriver'
+pro_path = os.path.abspath('./')
+path = os.path.join(pro_path, 'chromedriver')
+cache_dir = os.path.join(pro_path, 'cache')
+
 opt = Options()
 opt.add_argument('--headless')
-driver = webdriver.Chrome(executable_path=path, chrome_options=opt)
+opt.add_argument('--disable-plugin')
+opt.add_argument('--disable-images')
+opt.add_argument(f'--disk-cache-dir={cache_dir}')
 
-driver.get('https://pcredivewiki.tw/Character/Detail/%E9%9C%9E')
+try:
+    start = datetime.now()
+    driver = webdriver.Chrome(executable_path=path, chrome_options=opt)
+    driver.get('https://pcredivewiki.tw/Character/Detail/%E9%9C%9E')
+    print(driver.title)
+    
+    #  爬取技能数据
+    # skill_info = get_chara_skill(driver)
+    # print(skill_info)
 
-print(driver.title)
+    # 爬取角色信息
+    # chara_info = get_chara_info(driver)
+    # print(chara_info)
 
-#  爬取技能数据
-# skill_info = get_chara_skill(driver)
-# print(skill_info)
+    act_pattern = get_act_pattern(driver)
+    print(act_pattern)
 
-driver.close()
+    end = datetime.now()
+    print(end - start)
 
-end = datetime.now()
-print(end - start)
-
-
-
+finally:
+    driver.quit()
